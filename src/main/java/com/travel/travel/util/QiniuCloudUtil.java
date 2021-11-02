@@ -18,16 +18,16 @@ import java.io.IOException;
 public class QiniuCloudUtil {
 
     // 设置需要操作的账号的AK和SK
-    private static final String ACCESS_KEY = "J0aMK-TOptDYs09kwMKdIVDCMbLP5gTCXjxDveYF";
-    private static final String SECRET_KEY = "-Qi2gXUqqHjqkevgmmt9S0D1x8gtuD_p3opS77Al";
+    private static final String ACCESS_KEY = "";//七牛云公钥
+    private static final String SECRET_KEY = "";//七牛云秘钥
 
     // 要上传的空间
-    private static final String bucketname = "cherry-ba1";
+    private static final String bucketname = "";//七牛云存储空间
 
     // 密钥
     private static final Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 
-    private static final String DOMAIN = "qtche87sj.hn-bkt.clouddn.com";
+    private static final String DOMAIN = "";//七牛云存储空间域名;
 
     public  String returnUrl(){
         return "http://"+DOMAIN+"/";
@@ -53,7 +53,7 @@ public class QiniuCloudUtil {
             if (res.isOK()) {
                 Ret ret = res.jsonToObject(Ret.class);
                 //如果不需要对图片进行样式处理，则使用以下方式即可
-                return "http://qtche87sj.hn-bkt.clouddn.com/" + ret.key;
+                return DOMAIN + ret.key;
             }
         } catch (QiniuException e) {
             Response r = e.response;
