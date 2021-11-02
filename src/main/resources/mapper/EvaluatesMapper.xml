@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.EvaluatesMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Evaluates">
+    <id column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="evaluate_level" jdbcType="INTEGER" property="evaluateLevel" />
+    <result column="hotel_level" jdbcType="INTEGER" property="hotelLevel" />
+    <result column="evaluate_content" jdbcType="VARCHAR" property="evaluateContent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="order_name" jdbcType="VARCHAR" property="orderName" />
+    <result column="orderImg" jdbcType="VARCHAR" property="orderImg" />
+    <result column="order_count" jdbcType="INTEGER" property="orderCount" />
+    <result column="order_singel_price" jdbcType="DOUBLE" property="orderSingelPrice" />
+    <result column="orderCreatTime" jdbcType="TIMESTAMP" property="orderCreatTime" />
+    <result column="user_head" jdbcType="VARCHAR" property="userHead" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    evaluate_id, order_id, user_id, evaluate_level, evaluate_content, create_time, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from evaluates
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update evaluates
+    set is_delete=1
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Evaluates">
+    insert into evaluates ( order_id, user_id,
+      evaluate_level, evaluate_content, create_time, 
+      is_delete,hotel_level)
+    values ( #{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
+      #{evaluateLevel,jdbcType=INTEGER}, #{evaluateContent,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      0,#{hotelLevel,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Evaluates">
+    insert into evaluates
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="evaluateId != null">
+        evaluate_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="evaluateLevel != null">
+        evaluate_level,
+      </if>
+      <if test="evaluateContent != null">
+        evaluate_content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="evaluateId != null">
+        #{evaluateId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateLevel != null">
+        #{evaluateLevel,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateContent != null">
+        #{evaluateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Evaluates">
+    update evaluates
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateLevel != null">
+        evaluate_level = #{evaluateLevel,jdbcType=INTEGER},
+      </if>
+      <if test="hotelLevel != null">
+        hotel_level = #{ehotelLevel,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateContent != null">
+        evaluate_content = #{evaluateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Evaluates">
+    update evaluates
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      evaluate_level = #{evaluateLevel,jdbcType=INTEGER},
+      evaluate_content = #{evaluateContent,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAllEvaluates" resultMap="BaseResultMap">
+    select e.evaluate_id,
+    e.order_id,
+    e.user_id,
+    e.evaluate_level,
+    e.hotel_level,
+    e.evaluate_content,
+    e.create_time,
+    e.is_delete,
+    u.user_name,
+    u.user_head,
+    o.order_name
+    from evaluates e,users u,orders o
+    where e.is_delete=0
+    and e.user_id=u.user_id
+    and e.order_id=o.order_id
+    <if test="evaluateContent != null and evaluateContent!=''">
+      and o.order_name like CONCAT ('%',#{evaluateContent,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="evaluateLevel==1">
+      and  (e.evaluate_level =4 or e.evaluate_level=5)
+    </if>
+    <if test="evaluateLevel==2">
+      and  (e.evaluate_level =3 )
+    </if>
+    <if test="evaluateLevel==3">
+      and  (e.evaluate_level =1 or e.evaluate_level=2)
+    </if>
+    order by e.create_time limit #{current},#{size}
+  </select>
+  <select id="getAllEvaluatesByLineId" resultMap="BaseResultMap">
+    select e.evaluate_id,
+    e.order_id,
+    e.user_id,
+    e.evaluate_level,
+    e.evaluate_content,
+    e.create_time,
+    e.hotel_level,
+    e.is_delete,
+    u.user_name,
+    u.user_head
+    from evaluates e left join users u
+    on e.user_id=u.user_id
+    left join orders o
+    on e.order_id=o.order_id
+    left join line_group lg
+    on lg.id=o.line_or_hotel_id
+    left join `lines` l
+    on lg.line_id=l.line_id
+    where e.is_delete=0
+    <if test="lineId != null and lineId!=0">
+      <if test="type ==1">
+        and lg.line_id =#{lineId,jdbcType=INTEGER}
+        <if test="level==1">
+          and  (e.evaluate_level =4 or e.evaluate_level=5)
+        </if>
+        <if test="level==2">
+          and  (e.evaluate_level =3 )
+        </if>
+        <if test="level==3">
+          and  (e.evaluate_level =1 or e.evaluate_level=2)
+        </if>
+      </if>
+      <if test="type ==2">
+        and ((o.line_or_hotel_id =#{lineId,jdbcType=INTEGER} and o.order_type= 2) or lg.hotel_id=#{lineId,jdbcType=INTEGER})
+        <if test="level==1">
+          and  (e.hotel_level =4 or e.hotel_level=5)
+        </if>
+        <if test="level==2">
+          and  (e.hotel_level =3 )
+        </if>
+        <if test="level==3">
+          and  (e.hotel_level =1 or e.hotel_level=2)
+        </if>
+      </if>
+    </if>
+    order by e.create_time limit #{current},#{size}
+  </select>
+  <select id="getAllEvaluatesCount" resultType="java.lang.Integer">
+    select count(1)
+    from evaluates e,users u,orders o
+    where e.is_delete=0
+    and e.user_id=u.user_id
+    and e.order_id=o.order_id
+    <if test="evaluateContent != null and evaluateContent!=''">
+      and o.order_name like CONCAT ('%',#{evaluateContent,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="evaluateLevel==1">
+      and  (e.evaluate_level =4 or e.evaluate_level=5)
+    </if>
+    <if test="evaluateLevel==2">
+      and  (e.evaluate_level =3 )
+    </if>
+    <if test="evaluateLevel==3">
+      and  (e.evaluate_level =1 or e.evaluate_level=2)
+    </if>
+  </select>
+
+  <select id="getAllEvaluatesByLineIdCount" resultType="java.lang.Integer">
+    select count(1)
+    from evaluates e left join users u
+    on e.user_id=u.user_id
+    left join orders o
+    on e.order_id=o.order_id
+    left join line_group lg
+    on lg.id=o.line_or_hotel_id
+    left join `lines` l
+    on lg.line_id=l.line_id
+    where e.is_delete=0
+    <if test="lineId != null and lineId!=0">
+      <if test="type ==1">
+        and lg.line_id =#{lineId,jdbcType=INTEGER}
+        <if test="level==1">
+          and  (e.evaluate_level =4 or e.evaluate_level=5)
+        </if>
+        <if test="level==2">
+          and  (e.evaluate_level =3 )
+        </if>
+        <if test="level==3">
+          and  (e.evaluate_level =1 or e.evaluate_level=2)
+        </if>
+      </if>
+      <if test="type ==2">
+        and ((o.line_or_hotel_id =#{lineId,jdbcType=INTEGER} and o.order_type= 2) or lg.hotel_id=#{lineId,jdbcType=INTEGER})
+        <if test="level==1">
+          and  (e.hotel_level =4 or e.hotel_level=5)
+        </if>
+        <if test="level==2">
+          and  (e.hotel_level =3 )
+        </if>
+        <if test="level==3">
+          and  (e.hotel_level =1 or e.hotel_level=2)
+        </if>
+      </if>
+    </if>
+
+
+  </select>
+
+  <select id="getAllEvaluatesUp" resultMap="BaseResultMap">
+    select e.evaluate_id,
+    e.order_id,
+    e.user_id,
+    e.evaluate_level,
+    e.hotel_level,
+    e.evaluate_content,
+    e.create_time,
+    e.is_delete,
+    u.user_name,
+    o.order_name,
+    o.order_count,
+    o.order_singel_price,
+    o.creat_time as orderCreatTime,
+    (case
+    when(o.order_type=2) then (SELECT h.hotel_img from hotels h where h.hotel_id=o.line_or_hotel_id)
+    when(o.order_type=1) then (SELECT l.line_photo from `lines` l,line_group lg where l.line_id=o.line_or_hotel_id and lg.line_id=l.line_id)
+    end )as orderImg
+    from evaluates e
+    left join users u
+    on e.user_id=u.user_id
+    left join orders o
+    on e.order_id=o.order_id
+    where e.is_delete=0
+    <if test="orderName != null and orderName!=''">
+      and o.order_name like CONCAT ('%',#{orderName,jdbcType=VARCHAR},'%')
+    </if>
+   
+    <if test="evaluateLevel==1">
+      and  (e.evaluate_level =4 or e.evaluate_level=5)
+    </if>
+    <if test="evaluateLevel==2">
+      and  (e.evaluate_level =3 )
+    </if>
+    <if test="evaluateLevel==3">
+      and  (e.evaluate_level =1 or e.evaluate_level=2)
+    </if>
+    <if test="orderType != 0">
+      and o.order_type= #{orderType,jdbcType=INTEGER}
+    </if>
+    <if test="userId != 0 and userId!=null">
+      and e.user_id= #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="start != null and start !='' and end != null and end !=''">
+      and e.create_time between #{start,jdbcType=VARCHAR} and #{end,jdbcType=VARCHAR}
+    </if>
+    order by e.create_time limit #{current},#{size}
+  </select>
+  <select id="getAllEvaluatesCountUp" resultType="java.lang.Integer">
+    select count(1)
+    from evaluates e
+    left join users u
+    on e.user_id=u.user_id
+    left join orders o
+    on e.order_id=o.order_id
+    where e.is_delete=0
+    <if test="orderName != null and orderName!=''">
+      and o.order_name like CONCAT ('%',#{orderName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="evaluateLevel==1">
+      and  (e.evaluate_level =4 or e.evaluate_level=5)
+    </if>
+    <if test="evaluateLevel==2">
+      and  (e.evaluate_level =3 )
+    </if>
+    <if test="evaluateLevel==3">
+      and  (e.evaluate_level =1 or e.evaluate_level=2)
+    </if>
+    <if test="orderType != 0">
+      and o.order_type= #{orderType,jdbcType=INTEGER}
+    </if>
+    <if test="userId != 0 and userId!=null">
+      and e.user_id= #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="start != null and start !='' and end != null and end !=''">
+      and e.create_time between #{start,jdbcType=VARCHAR} and #{end,jdbcType=VARCHAR}
+    </if>
+  </select>
+</mapper>

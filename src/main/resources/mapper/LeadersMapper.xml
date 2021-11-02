@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.LeadersMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Leaders">
+    <id column="leader_id" jdbcType="INTEGER" property="leaderId" />
+    <result column="leader_number" jdbcType="VARCHAR" property="leaderNumber" />
+    <result column="leader_name" jdbcType="VARCHAR" property="leaderName" />
+    <result column="leader_password" jdbcType="VARCHAR" property="leaderPassword" />
+    <result column="leader_sex" jdbcType="INTEGER" property="leaderSex" />
+    <result column="leader_age" jdbcType="INTEGER" property="leaderAge" />
+    <result column="leader_tel" jdbcType="VARCHAR" property="leaderTel" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    leader_id, leader_number, leader_name, leader_password, leader_sex, leader_age, leader_tel, group_id, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+     select  l.leader_id,
+    l.leader_number,
+    l.leader_name,
+    l.leader_password,
+    l.leader_sex,
+    l.leader_age,
+    l.leader_tel,
+    l.group_id,
+    l.is_delete,
+    g.group_name
+    from leaders l,groups g
+    where l.group_id=g.group_id
+    and leader_id = #{leaderId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  leaders
+    set is_delete=1
+    where leader_id = #{leaderId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Leaders">
+    insert into leaders ( leader_number, leader_name,
+      leader_password, leader_sex, leader_age, 
+      leader_tel,  group_id,
+      is_delete)
+    values ( #{leaderNumber,jdbcType=VARCHAR}, #{leaderName,jdbcType=VARCHAR},
+      #{leaderPassword,jdbcType=VARCHAR}, #{leaderSex,jdbcType=INTEGER}, #{leaderAge,jdbcType=INTEGER}, 
+      #{leaderTel,jdbcType=VARCHAR}, #{groupId,jdbcType=INTEGER},
+      0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Leaders">
+    insert into leaders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="leaderId != null">
+        leader_id,
+      </if>
+      <if test="leaderNumber != null">
+        leader_number,
+      </if>
+      <if test="leaderName != null">
+        leader_name,
+      </if>
+      <if test="leaderPassword != null">
+        leader_password,
+      </if>
+      <if test="leaderSex != null">
+        leader_sex,
+      </if>
+      <if test="leaderAge != null">
+        leader_age,
+      </if>
+      <if test="leaderTel != null">
+        leader_tel,
+      </if>
+      <if test="leaderLevel != null">
+        leader_level,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="leaderId != null">
+        #{leaderId,jdbcType=INTEGER},
+      </if>
+      <if test="leaderNumber != null">
+        #{leaderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderName != null">
+        #{leaderName,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderPassword != null">
+        #{leaderPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderSex != null">
+        #{leaderSex,jdbcType=INTEGER},
+      </if>
+      <if test="leaderAge != null">
+        #{leaderAge,jdbcType=INTEGER},
+      </if>
+      <if test="leaderTel != null">
+        #{leaderTel,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderLevel != null">
+        #{leaderLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Leaders">
+    update leaders
+    <set>
+      <if test="leaderNumber != null">
+        leader_number = #{leaderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderName != null">
+        leader_name = #{leaderName,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderPassword != null">
+        leader_password = #{leaderPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderSex != null">
+        leader_sex = #{leaderSex,jdbcType=INTEGER},
+      </if>
+      <if test="leaderAge != null">
+        leader_age = #{leaderAge,jdbcType=INTEGER},
+      </if>
+      <if test="leaderTel != null">
+        leader_tel = #{leaderTel,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderLevel != null">
+        leader_level = #{leaderLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where leader_id = #{leaderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Leaders">
+    update leaders
+    set leader_number = #{leaderNumber,jdbcType=VARCHAR},
+      leader_name = #{leaderName,jdbcType=VARCHAR},
+      leader_password = #{leaderPassword,jdbcType=VARCHAR},
+      leader_sex = #{leaderSex,jdbcType=INTEGER},
+      leader_age = #{leaderAge,jdbcType=INTEGER},
+      leader_tel = #{leaderTel,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=INTEGER},
+      is_delete = 0
+    where leader_id = #{leaderId,jdbcType=INTEGER}
+  </update>
+  <select id="getAllLeaders" resultMap="BaseResultMap">
+    select  l.leader_id,
+    l.leader_number,
+    l.leader_name,
+    l.leader_password,
+    l.leader_sex,
+    l.leader_age,
+    l.leader_tel,
+    l.group_id,
+    l.is_delete,
+    g.group_name
+    from leaders l,groups g
+    where l.is_delete=0
+    and l.group_id=g.group_id
+    <if test="leaderName != null and leaderName!=''">
+      and l.leader_name like CONCAT ('%',#{leaderName,jdbcType=VARCHAR},'%')
+    </if>
+    order by l.leader_id limit #{current},#{size}
+  </select>
+  <select id="getLeaderByGroupId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select  l.leader_id,
+    l.leader_number,
+    l.leader_name,
+    l.leader_password,
+    l.leader_sex,
+    l.leader_age,
+    l.leader_tel,
+    l.group_id,
+    l.is_delete,
+    g.group_name
+    from leaders l,groups g
+    where l.is_delete=0
+    and l.group_id=g.group_id
+    and l.group_id = #{groupId,jdbcType=INTEGER}
+  </select>
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from leaders l,groups g
+    where l.is_delete=0
+    and l.group_id=g.group_id
+    <if test="leaderName != null and leaderName!=''">
+      and l.leader_name like CONCAT ('%',#{leaderName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <select id="selectByAccount"  resultMap="BaseResultMap">
+     select  l.leader_id,
+    l.leader_number,
+    l.leader_name,
+    l.leader_password,
+    l.leader_sex,
+    l.leader_age,
+    l.leader_tel,
+    l.group_id,
+    l.is_delete,
+    g.group_name
+    from leaders l,groups g
+    where l.group_id=g.group_id
+    and leader_number = #{leaderAccount,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updatePassword" >
+    update leaders
+    set
+      leader_password = #{leaderPassword,jdbcType=VARCHAR}
+    where leader_id = #{leaderId,jdbcType=INTEGER}
+  </update>
+</mapper>

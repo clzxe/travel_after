@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.ClassesMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Classes">
+    <id column="class_id" jdbcType="INTEGER" property="classId" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    class_id, class_name, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classes
+    where class_id = #{classId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  classes
+    set is_delete
+    where class_id = #{classId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Classes">
+    insert into classes ( class_name, is_delete
+      )
+    values (#{classId,jdbcType=INTEGER}, #{className,jdbcType=VARCHAR}, 0
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Classes">
+    insert into classes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="classId != null">
+        class_id,
+      </if>
+      <if test="className != null">
+        class_name,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="classId != null">
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Classes">
+    update classes
+    <set>
+      <if test="className != null">
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where class_id = #{classId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Classes">
+    update classes
+    set class_name = #{className,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where class_id = #{classId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAllClasses" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from classes
+    <if test="className != null and className !=''">
+      where class_name like CONCAT ('%',#{className,jdbcType=VARCHAR},'%')
+    </if>
+    order by class_id DESC  limit #{current},#{size}
+  </select>
+
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from classes
+    <if test="className != null and className !=''">
+      where class_name like CONCAT ('%',#{className,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from classes
+    order by class_id
+  </select>
+
+</mapper>

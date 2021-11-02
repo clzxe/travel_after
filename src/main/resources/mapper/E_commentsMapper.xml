@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.E_commentsMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.E_comments">
+    <id column="comment_id" jdbcType="INTEGER" property="commentId" />
+    <result column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="order_name" jdbcType="VARCHAR" property="orderName" />
+    <result column="evaluate_content" jdbcType="VARCHAR" property="evaluateContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    comment_id, evaluate_id, order_id, user_id, comment_content, create_time, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from e_comments
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update e_comments
+    set is_delete=1
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.E_comments">
+    insert into e_comments ( evaluate_id, order_id,
+      user_id, comment_content, create_time, 
+      is_delete)
+    values (#{evaluateId,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR},
+      #{userId,jdbcType=INTEGER}, #{commentContent,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.E_comments">
+    insert into e_comments
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="evaluateId != null">
+        evaluate_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="commentContent != null">
+        comment_content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateId != null">
+        #{evaluateId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null">
+        #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.E_comments">
+    update e_comments
+    <set>
+      <if test="evaluateId != null">
+        evaluate_id = #{evaluateId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null">
+        comment_content = #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.E_comments">
+    update e_comments
+    set evaluate_id = #{evaluateId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      comment_content = #{commentContent,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAllE_comments" resultMap="BaseResultMap">
+    select ec.comment_id,
+    ec.evaluate_id,
+    ec.order_id,
+    ec.line_id,
+    ec.user_id,
+    ec.comment_content,
+    ec.create_time,
+    ec.is_delete,
+    e.evaluate_content,
+    u.user_name,
+    o.order_name
+    from evaluates e,users u,orders o,e_comments ec
+    where ec.is_delete=0
+    and ec.user_id=u.user_id
+    and ec.order_id=o.order_id
+    and ec.evaluate_id=e.evaluate_id
+    <if test="commentContent != null">
+      and ec.comment_content like CONCAT ('%',#{commentContent,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="searchType != 0">
+      and o.order_type= #{searchType,jdbcType=INTEGER}
+    </if>
+    order by ec.creat_time limit #{size},#{current}
+  </select>
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from evaluates e,users u,orders o,e_comments ec
+    where ec.is_delete=0
+    and ec.user_id=u.user_id
+    and ec.order_id=o.order_id
+    and ec.evaluate_id=e.evaluate_id
+    <if test="commentContent != null">
+      and ec.comment_content like CONCAT ('%',#{commentContent,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="searchType != 0">
+      and o.order_type= #{searchType,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

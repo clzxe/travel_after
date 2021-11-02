@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.LinesMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Lines">
+    <id column="line_id" jdbcType="INTEGER" property="lineId" />
+    <result column="line_title" jdbcType="VARCHAR" property="lineTitle" />
+    <result column="line_description" jdbcType="VARCHAR" property="lineDescription" />
+    <result column="line_scenic" jdbcType="VARCHAR" property="lineScenic" />
+    <result column="line_photo" jdbcType="VARCHAR" property="linePhoto" />
+    <result column="line_total_time" jdbcType="DOUBLE" property="lineTotalTime" />
+    <result column="theme_id" jdbcType="VARCHAR" property="themeId" />
+    <result column="hotel_id" jdbcType="INTEGER" property="hotelId" />
+    <result column="is_include_hotel" jdbcType="INTEGER" property="isIncludeHotel" />
+    <result column="line_creat_time" jdbcType="TIMESTAMP" property="lineCreatTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+      <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="room_id" jdbcType="INTEGER" property="roomId" />
+    <result column="theme_name" jdbcType="VARCHAR" property="themeName" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="scenic_name" jdbcType="VARCHAR" property="scenicName" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="hotel_room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="hotel_name" jdbcType="VARCHAR" property="hotelName" />
+    <result column="hotel_room_price" jdbcType="DOUBLE" property="roomPrice" />
+      <result column="line_price" jdbcType="DOUBLE" property="linePrice" />
+
+  </resultMap>
+
+  <resultMap id="ItemResultMap" type="com.travel.travel.entity.Lines">
+    <id column="line_id" jdbcType="INTEGER" property="itemId" />
+    <result column="line_title" jdbcType="VARCHAR" property="lineTitle" />
+    <result column="line_description" jdbcType="VARCHAR" property="lineDescription" />
+    <result column="line_scenic" jdbcType="VARCHAR" property="lineScenic" />
+    <result column="line_photo" jdbcType="VARCHAR" property="linePhoto" />
+    <result column="line_total_time" jdbcType="DOUBLE" property="lineTotalTime" />
+    <result column="theme_id" jdbcType="VARCHAR" property="themeId" />
+    <result column="hotel_id" jdbcType="INTEGER" property="hotelId" />
+    <result column="is_include_hotel" jdbcType="INTEGER" property="isIncludeHotel" />
+    <result column="line_creat_time" jdbcType="TIMESTAMP" property="lineCreatTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="room_id" jdbcType="INTEGER" property="roomId" />
+    <result column="theme_name" jdbcType="VARCHAR" property="themeName" />
+    <result column="scenic_name" jdbcType="VARCHAR" property="scenicName" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="hotel_room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="hotel_name" jdbcType="VARCHAR" property="hotelName" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    line_id, line_title, line_description, line_scenic, line_photo, line_total_time, 
+    theme_id,  hotel_id, is_include_hotel, line_creat_time,
+    is_delete, room_id,cityId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    l.line_id,
+    l.line_title,
+    l.line_description,
+    l.line_scenic,
+    l.line_photo,
+    l.line_total_time,
+    l.theme_id,
+    l.line_creat_time,
+    l.hotel_id,
+    l.is_include_hotel,
+    l.room_id,
+    l.city_id,
+    lg.line_price,
+    l.is_delete,
+    t.theme_name,
+    r.hotel_room_price,
+    ci.city_name,
+    p.province_name,
+    cl.class_name
+    from `lines` l left join line_group lg on lg.line_id=l.line_id
+    left join leaders le on lg.leader_id=le.leader_id
+    left join groups g on lg.group_id=g.group_id
+    left join city ci on l.city_id=ci.city_id
+    left join province p on ci.province_id=p.province_id
+    left join themes t on l.theme_id=t.theme_id
+    left join classes cl on t.class_id=cl.class_id
+    left join hotel_rooms r on r.hotel_room_id=l.room_id
+    where l.is_delete=0
+    and   l.line_id = #{lineId,jdbcType=INTEGER}
+    GROUP BY l.line_id
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  `lines` set is_delete=1
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Lines">
+    insert into `lines` (line_title, line_description,
+      line_scenic, line_photo, line_total_time, 
+      theme_id,
+      hotel_id, is_include_hotel, line_creat_time, 
+      is_delete, room_id,city_id)
+    values ( #{lineTitle,jdbcType=VARCHAR}, #{lineDescription,jdbcType=VARCHAR},
+      #{lineScenic,jdbcType=VARCHAR}, #{linePhoto,jdbcType=VARCHAR}, #{lineTotalTime,jdbcType=DOUBLE},
+       #{themeId,jdbcType=VARCHAR},
+      #{hotelId,jdbcType=INTEGER}, #{isIncludeHotel,jdbcType=INTEGER}, #{lineCreatTime,jdbcType=TIMESTAMP}, 
+      0, #{roomId,jdbcType=INTEGER},#{cityId,jdbcType=INTEGER})
+    <selectKey keyProperty="lineId" resultType="Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() as lineId
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Lines">
+    insert into `lines`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lineId != null">
+        line_id,
+      </if>
+      <if test="lineTitle != null">
+        line_title,
+      </if>
+      <if test="lineDescription != null">
+        line_description,
+      </if>
+      <if test="lineScenic != null">
+        line_scenic,
+      </if>
+      <if test="linePhoto != null">
+        line_photo,
+      </if>
+      <if test="lineTotalTime != null">
+        line_total_time,
+      </if>
+      <if test="themeId != null">
+        theme_id,
+      </if>
+      <if test="hotelId != null">
+        hotel_id,
+      </if>
+      <if test="isIncludeHotel != null">
+        is_include_hotel,
+      </if>
+      <if test="lineCreatTime != null">
+        line_creat_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="roomId != null">
+        room_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lineId != null">
+        #{lineId,jdbcType=INTEGER},
+      </if>
+      <if test="lineTitle != null">
+        #{lineTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="lineDescription != null">
+        #{lineDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="lineScenic != null">
+        #{lineScenic,jdbcType=INTEGER},
+      </if>
+      <if test="linePhoto != null">
+        #{linePhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="lineTotalTime != null">
+        #{lineTotalTime,jdbcType=DOUBLE},
+      </if>
+      <if test="themeId != null">
+        #{themeId,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelId != null">
+        #{hotelId,jdbcType=INTEGER},
+      </if>
+      <if test="isIncludeHotel != null">
+        #{isIncludeHotel,jdbcType=INTEGER},
+      </if>
+      <if test="lineCreatTime != null">
+        #{lineCreatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="roomId != null">
+        #{roomId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Lines">
+    update `lines`
+    <set>
+      <if test="lineTitle != null">
+        line_title = #{lineTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="lineDescription != null">
+        line_description = #{lineDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="lineScenic != null">
+        line_scenic = #{lineScenic,jdbcType=INTEGER},
+      </if>
+      <if test="linePhoto != null">
+        line_photo = #{linePhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="lineTotalTime != null">
+        line_total_time = #{lineTotalTime,jdbcType=DOUBLE},
+      </if>
+      <if test="themeId != null">
+        theme_id = #{themeId,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelId != null">
+        hotel_id = #{hotelId,jdbcType=INTEGER},
+      </if>
+      <if test="isIncludeHotel != null">
+        is_include_hotel = #{isIncludeHotel,jdbcType=INTEGER},
+      </if>
+      <if test="lineCreatTime != null">
+        line_creat_time = #{lineCreatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Lines">
+    update `lines`
+    set line_title = #{lineTitle,jdbcType=VARCHAR},
+      line_description = #{lineDescription,jdbcType=VARCHAR},
+      line_scenic = #{lineScenic,jdbcType=VARCHAR},
+      line_photo = #{linePhoto,jdbcType=VARCHAR},
+      line_total_time = #{lineTotalTime,jdbcType=DOUBLE},
+      theme_id = #{themeId,jdbcType=VARCHAR},
+      hotel_id = #{hotelId,jdbcType=INTEGER},
+      is_include_hotel = #{isIncludeHotel,jdbcType=INTEGER},
+      line_creat_time = #{lineCreatTime,jdbcType=TIMESTAMP},
+      is_delete = 0,
+      room_id = #{roomId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER}
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </update>
+  <select id="getLineHotLimitSix" resultType="java.lang.Long">
+   select
+    l.line_id
+    from `lines` l left join line_group lg on lg.line_id=l.line_id
+    left join leaders le on lg.leader_id=le.leader_id
+    left join groups g on lg.group_id=g.group_id
+    left join city ci on l.city_id=ci.city_id
+    left join province p on ci.province_id=p.province_id
+    left join themes t on l.theme_id=t.theme_id
+    left join classes cl on t.class_id=cl.class_id
+    left join orders o on lg.id=o.line_or_hotel_id
+    where l.is_delete=0
+    and lg.is_delete=0
+    and (o.order_type=1 or o.order_type IS NULL)
+    GROUP BY l.line_id
+    ORDER BY count(l.line_id) DESC limit 6
+  </select>
+  <select id="getLineThemeHotLimitSix" resultMap="BaseResultMap">
+   select
+    l.line_id,
+    l.line_title,
+    l.line_description,
+    l.line_scenic,
+    l.line_photo,
+    l.line_total_time,
+    l.theme_id,
+    l.line_creat_time,
+    l.hotel_id,
+    l.is_include_hotel,
+    l.room_id,
+    l.city_id,
+    lg.line_price,
+    l.is_delete,
+    t.theme_name,
+    r.hotel_room_price,
+    cl.class_name
+    from `lines` l left join line_group lg on lg.line_id=l.line_id
+    left join leaders le on lg.leader_id=le.leader_id
+    left join groups g on lg.group_id=g.group_id
+    left join city ci on l.city_id=ci.city_id
+    left join province p on ci.province_id=p.province_id
+    left join themes t on l.theme_id=t.theme_id
+    left join classes cl on t.class_id=cl.class_id
+    left join orders o on lg.id=o.line_or_hotel_id
+    left join hotel_rooms r on r.hotel_room_id=l.room_id
+    where l.is_delete=0
+    and lg.is_delete=0
+    and (o.order_type=1 or o.order_type IS NULL)
+    <if test="lineId!=0 and lineId!=null">
+      and   l.line_id != #{lineId,jdbcType=INTEGER}
+    </if>
+    <if test="themeId!=0 and themeId!=null">
+      and l.theme_id =#{themeId,jdbcType=INTEGER}
+    </if>
+    GROUP BY l.line_id
+    ORDER BY count(l.line_id) DESC limit #{num}
+  </select>
+  <select id="getLineNotLineId"  resultMap="BaseResultMap">
+   select
+    l.line_id,
+    l.line_title,
+    l.line_description,
+    l.line_scenic,
+    l.line_photo,
+    l.line_total_time,
+    l.theme_id,
+    l.line_creat_time,
+    l.hotel_id,
+    l.is_include_hotel,
+    l.room_id,
+    l.city_id,
+    lg.line_price,
+    l.is_delete,
+    t.theme_name,
+    r.hotel_room_price,
+    cl.class_name
+    from `lines` l left join line_group lg on lg.line_id=l.line_id
+    left join leaders le on lg.leader_id=le.leader_id
+    left join groups g on lg.group_id=g.group_id
+    left join city ci on l.city_id=ci.city_id
+    left join province p on ci.province_id=p.province_id
+    left join themes t on l.theme_id=t.theme_id
+    left join classes cl on t.class_id=cl.class_id
+    left join hotel_rooms r on r.hotel_room_id=l.room_id
+    where l.is_delete=0
+    and   l.line_id != #{lineId,jdbcType=INTEGER}
+      <if test="cityId!=0 and cityId!=null">
+          and  s.scenic_city=#{cityId,jdbcType=INTEGER}
+      </if>
+
+    GROUP BY l.line_id
+    ORDER BY count(l.line_id) DESC
+  </select>
+  <select id="getHot_line" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `lines`
+    ORDER BY RAND() LIMIT 4
+  </select>
+  <select id="getNew_line" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `lines`
+    ORDER BY RAND() LIMIT 4
+  </select>
+
+  <select id="getAllLines" resultMap="BaseResultMap">
+    select  l.line_id,
+    l.line_title,
+    l.line_description,
+    l.line_scenic,
+    l.line_photo,
+    l.line_total_time,
+    l.theme_id,
+    l.line_creat_time,
+    l.hotel_id,
+    l.is_include_hotel,
+    l.room_id,
+    l.city_id,
+    l.is_delete,
+    t.theme_name,
+    ci,city_name,
+    cl.class_name
+    from `lines` l,themes t,classes cl,city ci
+    where l.is_delete=0
+    and l.line_scenic=s.scenic_id
+    and l.theme_id=t.theme_id
+    and t.class_id=cl.class_id
+    and l.city_id=ci.city_id
+    <if test="lineName != null and lineName !=''">
+     and l.line_title like CONCAT ('%',#{lineName,jdbcType=VARCHAR},'%')
+    </if>
+    order by l.line_creat_time DESC limit #{current},#{size}
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select  l.line_id,
+    l.line_title,
+    l.line_description,
+    l.line_scenic,
+    l.line_photo,
+    l.line_total_time,
+    l.theme_id,
+    l.line_creat_time,
+    l.hotel_id,
+    l.is_include_hotel,
+    l.room_id,
+    l.city_id,
+    l.is_delete,
+    ci.city_name,
+    t.theme_name,
+    cl.class_name
+    from `lines` l,themes t,classes cl,city ci
+    where l.is_delete=0
+    and l.theme_id=t.theme_id
+    and t.class_id=cl.class_id
+    and l.city_id=ci.city_id
+    order by l.line_creat_time
+  </select>
+  <select id="getAllCount" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    from `lines` l,themes t
+    where l.is_delete=0
+    and l.theme_id=t.theme_id
+    <if test="lineName != null and lineName !=''">
+      and l.line_title like CONCAT ('%',#{lineName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <select id="getAllLinesTheme" resultMap="BaseResultMap">
+    select  l.line_id,
+    l.line_title,
+    l.line_description,
+    l.line_scenic,
+    l.line_photo,
+    l.line_total_time,
+    l.theme_id,
+    l.line_creat_time,
+    l.hotel_id,
+    l.is_include_hotel,
+    l.room_id,
+    l.is_delete,
+    l.city_id,
+    ci.city_name,
+    t.theme_name,
+    cl.class_name
+    from `lines` l,themes t,classes cl,city ci
+    where l.is_delete=0
+    and l.line_scenic=s.scenic_id
+    and l.theme_id=t.theme_id
+    and t.class_id=cl.class_id
+    and l.city_id=ci.city_id
+    <if test="themeId != null and themeId !=0">
+      and l.theme_id =#{themeId,jdbcType=INTEGER}
+    </if>
+    order by l.line_creat_time
+  </select>
+
+</mapper>

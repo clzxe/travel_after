@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.Shopping_cartMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Shopping_cart">
+    <id column="sc_id" jdbcType="INTEGER" property="scId" />
+    <result column="line_group_id" jdbcType="INTEGER" property="lineGroupId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="line_id" jdbcType="INTEGER" property="lineId" />
+    <result column="sc_count" jdbcType="INTEGER" property="scCount" />
+    <result column="sc_singel_price" jdbcType="DOUBLE" property="scSingelPrice" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="line_title" jdbcType="VARCHAR" property="lineName" />
+    <result column="line_photo" jdbcType="VARCHAR" property="linePhoto" />
+    <result column="line_photo" jdbcType="VARCHAR" property="linePhoto" />
+    <result column="room_id" jdbcType="INTEGER" property="roomId" />
+    <result column="hotel_id" jdbcType="INTEGER" property="hotelId" />
+    <result column="room_count" jdbcType="INTEGER" property="roomCount" />
+    <result column="line_total_time" jdbcType="DOUBLE" property="lineTotalTime" />
+    <result column="line_start_time" jdbcType="TIMESTAMP" property="lineStartTime" />
+    <result column="hotel_room_price" jdbcType="DOUBLE" property="roomPrice" />
+    <result column="is_include_scenic" jdbcType="INTEGER" property="isIncludeScenic" />
+    <result column="l.line_scenic" jdbcType="VARCHAR" property="lineScenic" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sc_id, line_group_id, user_id, sc_count, sc_singel_price, is_delete,room_count,is_include_scenic
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shopping_cart
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update shopping_cart set is_delete=1
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Shopping_cart">
+    insert into shopping_cart (line_group_id, user_id,
+      sc_count, sc_singel_price, is_delete,room_count,is_include_scenic
+      )
+    values ( #{lineGroupId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+      #{scCount,jdbcType=INTEGER}, #{scSingelPrice,jdbcType=DOUBLE}, 0,#{roomCount,jdbcType=INTEGER}
+      ,#{isIncludeScenic,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Shopping_cart">
+    insert into shopping_cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="scId != null">
+        sc_id,
+      </if>
+      <if test="lineGroupId != null">
+        line_group_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="scCount != null">
+        sc_count,
+      </if>
+      <if test="scSingelPrice != null">
+        sc_singel_price,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="scId != null">
+        #{scId,jdbcType=INTEGER},
+      </if>
+      <if test="lineGroupId != null">
+        #{lineGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="scCount != null">
+        #{scCount,jdbcType=INTEGER},
+      </if>
+      <if test="scSingelPrice != null">
+        #{scSingelPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Shopping_cart">
+    update shopping_cart
+    <set>
+      <if test="lineGroupId != null">
+        line_group_id = #{lineGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="scCount != null">
+        sc_count = #{scCount,jdbcType=INTEGER},
+      </if>
+      <if test="scSingelPrice != null">
+        sc_singel_price = #{scSingelPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Shopping_cart">
+    update shopping_cart
+    set line_group_id = #{lineGroupId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      sc_count = #{scCount,jdbcType=INTEGER},
+      room_count = #{roomCount,jdbcType=INTEGER},
+      sc_singel_price = #{scSingelPrice,jdbcType=DOUBLE},
+      is_include_scenic=#{isIncludeScenic,jdbcType=DOUBLE},
+      is_delete = 0
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateCount" parameterType="com.travel.travel.entity.Shopping_cart">
+    update shopping_cart
+    set sc_count = #{scCount,jdbcType=INTEGER}
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAllCars"  resultMap="BaseResultMap">
+    select   sp.sc_id,
+    sp.line_group_id,
+    sp.user_id,
+    sp.sc_count,
+    sp.sc_singel_price,
+    sp.is_delete,
+    sp.room_count,
+    sp.is_include_scenic,
+    l.line_title,
+    l.line_photo,
+    lg.line_start_time,
+    l.line_total_time,
+    l.room_id,
+    r.hotel_room_price,
+    l.hotel_id,
+    l.line_scenic
+    from shopping_cart sp
+    left join line_group lg
+    on sp.line_group_id=lg.id
+    left join `lines` l
+    on lg.line_id=l.line_id
+    left join hotel_rooms r
+    on r.hotel_room_id=l.room_id
+    where sp.user_id = #{userId,jdbcType=INTEGER}
+    and sp.is_delete=0
+    order by sp.sc_id limit #{current},#{size}
+  </select>
+
+  <select id="getAllCarsO"  resultType="java.lang.Long">
+    select  DISTINCT l.line_id
+    from shopping_cart sp
+    left join line_group lg
+    on sp.line_group_id=lg.id
+    left join `lines` l
+    on lg.line_id=l.line_id
+    where sp.user_id = #{userId,jdbcType=INTEGER}
+
+  </select>
+
+  <select id="getAllCarsCount"  resultType="java.lang.Integer">
+    select   count(1)
+    from shopping_cart sp
+    where user_id = #{userId,jdbcType=INTEGER}
+     and sp.is_delete=0
+  </select>
+
+</mapper>

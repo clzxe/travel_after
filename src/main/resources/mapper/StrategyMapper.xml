@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.StrategyMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Strategy">
+    <id column="strategy_id" jdbcType="INTEGER" property="strategyId" />
+    <result column="scenic_id" jdbcType="INTEGER" property="scenicId" />
+    <result column="strategy_name" jdbcType="VARCHAR" property="strategyName" />
+    <result column="strategy_img" jdbcType="VARCHAR" property="strategyImg" />
+    <result column="strategy_cost_money" jdbcType="VARCHAR" property="strategyCostMoney" />
+    <result column="strategy_travel_day" jdbcType="VARCHAR" property="strategyTravelDay" />
+    <result column="strategy_day" jdbcType="TIMESTAMP" property="strategyDay" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="scenic_name" jdbcType="VARCHAR" property="scenicName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_head" jdbcType="VARCHAR" property="userHead" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.travel.travel.entity.Strategy">
+    <result column="strategy_content" jdbcType="LONGVARCHAR" property="strategyContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    strategy_id, scenic_id, strategy_name, strategy_img, strategy_cost_money, strategy_travel_day, 
+    strategy_day, user_id, is_delete, create_time, update_time
+  </sql>
+  <sql id="Blob_Column_List">
+    strategy_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select  st.strategy_id,
+    st.scenic_id,
+    st.strategy_name,
+    st.strategy_img,
+    st.user_id,
+    st.is_delete,
+    st.create_time,
+    st.update_time,
+    st.strategy_cost_money,
+    st.strategy_travel_day,
+    st.strategy_day,
+    st.strategy_content,
+    u.user_name,
+    s.scenic_name,
+    u.user_head
+    from strategy st left join users u on st.user_id=u.user_id
+    left join scenics s on st.scenic_id=s.scenic_id
+    where st.strategy_id = #{strategyId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  strategy
+    set is_delete=1
+    where strategy_id = #{strategyId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Strategy">
+    insert into strategy ( scenic_id, strategy_name,
+      strategy_img, strategy_cost_money, strategy_travel_day, 
+      strategy_day, user_id, is_delete, 
+      create_time, update_time, strategy_content
+      )
+    values ( #{scenicId,jdbcType=INTEGER}, #{strategyName,jdbcType=VARCHAR},
+      #{strategyImg,jdbcType=VARCHAR}, #{strategyCostMoney,jdbcType=VARCHAR}, #{strategyTravelDay,jdbcType=VARCHAR}, 
+      #{strategyDay,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, 0,
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{strategyContent,jdbcType=LONGVARCHAR}
+      )
+    <selectKey keyProperty="strategyId" resultType="Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() as strategyId
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Strategy">
+    insert into strategy
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="strategyId != null">
+        strategy_id,
+      </if>
+      <if test="scenicId != null">
+        scenic_id,
+      </if>
+      <if test="strategyName != null">
+        strategy_name,
+      </if>
+      <if test="strategyImg != null">
+        strategy_img,
+      </if>
+      <if test="strategyCostMoney != null">
+        strategy_cost_money,
+      </if>
+      <if test="strategyTravelDay != null">
+        strategy_travel_day,
+      </if>
+      <if test="strategyDay != null">
+        strategy_day,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="strategyContent != null">
+        strategy_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="strategyId != null">
+        #{strategyId,jdbcType=INTEGER},
+      </if>
+      <if test="scenicId != null">
+        #{scenicId,jdbcType=INTEGER},
+      </if>
+      <if test="strategyName != null">
+        #{strategyName,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyImg != null">
+        #{strategyImg,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyCostMoney != null">
+        #{strategyCostMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyTravelDay != null">
+        #{strategyTravelDay,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyDay != null">
+        #{strategyDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strategyContent != null">
+        #{strategyContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Strategy">
+    update strategy
+    <set>
+      <if test="scenicId != null">
+        scenic_id = #{scenicId,jdbcType=INTEGER},
+      </if>
+      <if test="strategyName != null">
+        strategy_name = #{strategyName,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyImg != null">
+        strategy_img = #{strategyImg,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyCostMoney != null">
+        strategy_cost_money = #{strategyCostMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyTravelDay != null">
+        strategy_travel_day = #{strategyTravelDay,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyDay != null">
+        strategy_day = #{strategyDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="strategyContent != null">
+        strategy_content = #{strategyContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where strategy_id = #{strategyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.travel.travel.entity.Strategy">
+    update strategy
+    set scenic_id = #{scenicId,jdbcType=INTEGER},
+      strategy_name = #{strategyName,jdbcType=VARCHAR},
+      strategy_img = #{strategyImg,jdbcType=VARCHAR},
+      strategy_cost_money = #{strategyCostMoney,jdbcType=VARCHAR},
+      strategy_travel_day = #{strategyTravelDay,jdbcType=VARCHAR},
+      strategy_day = #{strategyDay,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      is_delete = 0,
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      strategy_content = #{strategyContent,jdbcType=LONGVARCHAR}
+    where strategy_id = #{strategyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Strategy">
+    update strategy
+    set scenic_id = #{scenicId,jdbcType=INTEGER},
+      strategy_name = #{strategyName,jdbcType=VARCHAR},
+      strategy_img = #{strategyImg,jdbcType=VARCHAR},
+      strategy_cost_money = #{strategyCostMoney,jdbcType=VARCHAR},
+      strategy_travel_day = #{strategyTravelDay,jdbcType=VARCHAR},
+      strategy_day = #{strategyDay,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where strategy_id = #{strategyId,jdbcType=INTEGER}
+  </update>
+  <select id="getBest_strategy" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from strategy
+    ORDER BY RAND() LIMIT 4
+  </select>
+  <select id="getBestLimitSix" resultMap="BaseResultMap">
+  select  st.strategy_id,
+    st.scenic_id,
+    st.strategy_name,
+    st.strategy_img,
+    st.user_id,
+    st.is_delete,
+    st.create_time,
+    st.update_time,
+    st.strategy_cost_money,
+    st.strategy_travel_day,
+    st.strategy_day,
+    st.strategy_content,
+    u.user_name,
+    u.user_head,
+    s.scenic_name
+    from strategy st left join users u on st.user_id=u.user_id
+    left join scenics s on st.scenic_id=s.scenic_id
+    left join collect c on c.scenic_strategy=st.strategy_id
+    where st.is_delete=0
+    and (c.collect_type=2 or c.collect_type IS NULL)
+    GROUP BY st.strategy_id
+    ORDER BY count(st.strategy_id) LIMIT 6
+  </select>
+
+  <select id="getBestLimitFour" resultMap="BaseResultMap">
+  select  st.strategy_id,
+    st.scenic_id,
+    st.strategy_name,
+    st.strategy_img,
+    st.user_id,
+    st.is_delete,
+    st.create_time,
+    st.update_time,
+    st.strategy_cost_money,
+    st.strategy_travel_day,
+    st.strategy_day,
+    st.strategy_content,
+    u.user_name,
+    u.user_head,
+    s.scenic_name
+    from strategy st left join users u on st.user_id=u.user_id
+    left join scenics s on st.scenic_id=s.scenic_id
+    left join collect c on c.scenic_strategy=st.strategy_id
+    where st.is_delete=0
+    and (c.collect_type=2 or c.collect_type IS NULL)
+    GROUP BY st.strategy_id
+    ORDER BY count(st.strategy_id) LIMIT 4
+  </select>
+  <select id="getAllStrategy" resultMap="ResultMapWithBLOBs">
+    select  st.strategy_id,
+    st.scenic_id,
+    st.strategy_name,
+    st.strategy_img,
+    st.user_id,
+    st.is_delete,
+    st.create_time,
+    st.update_time,
+    st.strategy_cost_money,
+    st.strategy_travel_day,
+    st.strategy_day,
+    st.strategy_content,
+    u.user_name,
+    u.user_head,
+    s.scenic_name
+    from strategy st,users u,scenics s
+    where st.is_delete=0
+    and st.scenic_id=s.scenic_id
+    and st.user_id=u.user_id
+    <if test="strategyName != null and strategyName!=''">
+      and st.strategy_name like CONCAT ('%',#{strategyName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="scenicId != 0 and scenicId!=''">
+      and st.scenic_id= #{scenicId,jdbcType=INTEGER}
+    </if>
+    order by st.create_time limit #{current},#{size}
+  </select>
+  <select id="getAllStrategyCount" resultType="java.lang.Integer">
+    select count(1)
+    from strategy st,users u,scenics s
+    where st.is_delete=0
+    and st.scenic_id=s.scenic_id
+    and st.user_id=u.user_id
+    <if test="strategyName != null and strategyName!=''">
+      and st.strategy_name like CONCAT ('%',#{strategyName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="scenicId != 0 and scenicId!=null">
+      and st.scenic_id= #{scenicId,jdbcType=INTEGER}
+    </if>
+  </select>
+  <select id="getAllStrategyCountUserId" resultType="java.lang.Integer">
+    select count(1)
+    from strategy st,users u,scenics s
+    where st.is_delete=0
+    and st.scenic_id=s.scenic_id
+    and st.user_id=u.user_id
+    <if test="userId != 0 and userId !=null">
+      and st.user_id= #{userId,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="getStrategyInit" resultMap="BaseResultMap">
+    select  st.strategy_id,
+    st.scenic_id,
+    st.strategy_name,
+    st.strategy_img,
+    st.user_id,
+    st.is_delete,
+    st.create_time,
+    st.update_time,
+    st.strategy_cost_money,
+    st.strategy_travel_day,
+    st.strategy_day,
+    st.strategy_content,
+    u.user_name,
+    u.user_head,
+    s.scenic_name
+    from strategy st left join users u on st.user_id=u.user_id
+    left join scenics s on st.scenic_id=s.scenic_id
+    where st.is_delete=0
+    <if test="sortType==2">
+      left join collect c on st.strategy_id=c.scenic_strategy
+    </if>
+    <if test="strategyName != null and strategyName!=''">
+      and s.scenic_name like CONCAT ('%',#{strategyName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="sortType==2">
+      and c.collect_type=2
+      GROUP BY st.strategy_id
+      ORDER BY count(st.strategy_id) DESC limit #{current}, #{size}
+    </if>
+    <if test="sortType==3">
+      ORDER BY st.strategy_content DESC limit #{current}, #{size}
+    </if>
+    <if test="sortType==1">
+      order by RAND() limit 16
+    </if>
+    <if test="sortType==0">
+      order by CONVERT(st.strategy_name USING gbk) limit #{current}, #{size}
+    </if>
+
+  </select>
+  <select id="getStrategyInitCount" resultType="java.lang.Integer">
+    select count(1)
+    from strategy st left join users u on st.user_id=u.user_id
+    left join scenics s on st.scenic_id=s.scenic_id
+    where st.is_delete=0
+    <if test="sortType==2">
+      left join collect c on st.strategy_id=c.scenic_strategy
+    </if>
+    <if test="strategyName != null and strategyName!=''">
+      and s.scenic_name like CONCAT ('%',#{strategyName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="sortType==2">
+      and c.collect_type=2
+    </if>
+  </select>
+
+  <select id="getStrategyInitUp" resultMap="BaseResultMap">
+    select  st.strategy_id,
+    st.scenic_id,
+    st.strategy_name,
+    st.strategy_img,
+    st.user_id,
+    st.is_delete,
+    st.create_time,
+    st.update_time,
+    st.strategy_cost_money,
+    st.strategy_travel_day,
+    st.strategy_day,
+    st.strategy_content,
+    u.user_name,
+    u.user_head,
+    s.scenic_name
+    from strategy st left join users u on st.user_id=u.user_id
+    left join scenics s on st.scenic_id=s.scenic_id
+    where st.is_delete=0
+    and st.user_id=#{userId,jdbcType=INTEGER}
+    <if test="scenicName != null and scenicName!=''">
+      and s.scenic_name like CONCAT ('%',#{scenicName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="start != null and start !='' and end != null and end !=''">
+      and st.create_time between #{start,jdbcType=VARCHAR} and #{end,jdbcType=VARCHAR}
+    </if>
+    order by CONVERT(st.strategy_name USING gbk) limit #{current}, #{size}
+
+  </select>
+
+  <select id="getStrategyInitUpCount" resultType="java.lang.Integer">
+    select count(1)
+    from strategy st left join users u on st.user_id=u.user_id
+    left join scenics s on st.scenic_id=s.scenic_id
+    where st.is_delete=0
+    and st.user_id=#{userId,jdbcType=INTEGER}
+    <if test="scenicName != null and scenicName!=''">
+      and s.scenic_name like CONCAT ('%',#{scenicName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="start != null and start !='' and end != null and end !=''">
+      and st.create_time between #{start,jdbcType=VARCHAR} and #{end,jdbcType=VARCHAR}
+    </if>
+  </select>
+</mapper>

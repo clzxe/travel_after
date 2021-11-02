@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "absoluteImgPath",
+      "type": "java.lang.String",
+      "description": "Description for absoluteImgPath."
+  }
+] }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.Travel_timeMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Travel_time">
+    <id column="travel_time_id" jdbcType="INTEGER" property="travelTimeId" />
+    <result column="travel_time_line_id" jdbcType="INTEGER" property="travelTimeLineId" />
+    <result column="travel_time_time" jdbcType="VARCHAR" property="travelTimeTime" />
+    <result column="travel_time_food" jdbcType="VARCHAR" property="travelTimeFood" />
+    <result column="travel_time_activity" jdbcType="VARCHAR" property="travelTimeActivity" />
+    <result column="travel_time_hotel" jdbcType="VARCHAR" property="travelTimeHotel" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="row_num" jdbcType="INTEGER" property="rowNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    travel_time_id, travel_time_line_id, travel_time_time, travel_time_food, travel_time_activity, 
+    travel_time_hotel, is_delete, row_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from travel_time
+    where travel_time_id = #{travelTimeId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  travel_time
+    set is_delete=1
+    where travel_time_id = #{travelTimeId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Travel_time">
+    insert into travel_time ( travel_time_line_id, travel_time_time,
+      travel_time_food, travel_time_activity, travel_time_hotel, 
+      is_delete, row_num)
+    values (#{travelTimeLineId,jdbcType=INTEGER}, #{travelTimeTime,jdbcType=VARCHAR},
+      #{travelTimeFood,jdbcType=VARCHAR}, #{travelTimeActivity,jdbcType=VARCHAR}, #{travelTimeHotel,jdbcType=VARCHAR}, 
+     0, #{rowNum,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Travel_time">
+    insert into travel_time
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="travelTimeId != null">
+        travel_time_id,
+      </if>
+      <if test="travelTimeLineId != null">
+        travel_time_line_id,
+      </if>
+      <if test="travelTimeTime != null">
+        travel_time_time,
+      </if>
+      <if test="travelTimeFood != null">
+        travel_time_food,
+      </if>
+      <if test="travelTimeActivity != null">
+        travel_time_activity,
+      </if>
+      <if test="travelTimeHotel != null">
+        travel_time_hotel,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="rowNum != null">
+        row_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="travelTimeId != null">
+        #{travelTimeId,jdbcType=INTEGER},
+      </if>
+      <if test="travelTimeLineId != null">
+        #{travelTimeLineId,jdbcType=INTEGER},
+      </if>
+      <if test="travelTimeTime != null">
+        #{travelTimeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="travelTimeFood != null">
+        #{travelTimeFood,jdbcType=VARCHAR},
+      </if>
+      <if test="travelTimeActivity != null">
+        #{travelTimeActivity,jdbcType=VARCHAR},
+      </if>
+      <if test="travelTimeHotel != null">
+        #{travelTimeHotel,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="rowNum != null">
+        #{rowNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Travel_time">
+    update travel_time
+    <set>
+      <if test="travelTimeLineId != null">
+        travel_time_line_id = #{travelTimeLineId,jdbcType=INTEGER},
+      </if>
+      <if test="travelTimeTime != null">
+        travel_time_time = #{travelTimeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="travelTimeFood != null">
+        travel_time_food = #{travelTimeFood,jdbcType=VARCHAR},
+      </if>
+      <if test="travelTimeActivity != null">
+        travel_time_activity = #{travelTimeActivity,jdbcType=VARCHAR},
+      </if>
+      <if test="travelTimeHotel != null">
+        travel_time_hotel = #{travelTimeHotel,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="rowNum != null">
+        row_num = #{rowNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where travel_time_id = #{travelTimeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Travel_time">
+    update travel_time
+    set travel_time_line_id = #{travelTimeLineId,jdbcType=INTEGER},
+      travel_time_time = #{travelTimeTime,jdbcType=VARCHAR},
+      travel_time_food = #{travelTimeFood,jdbcType=VARCHAR},
+      travel_time_activity = #{travelTimeActivity,jdbcType=VARCHAR},
+      travel_time_hotel = #{travelTimeHotel,jdbcType=VARCHAR},
+      is_delete = 0,
+      row_num = #{rowNum,jdbcType=INTEGER}
+    where travel_time_id = #{travelTimeId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByLineId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from travel_time
+    where travel_time_line_id = #{travelTimeLineId,jdbcType=INTEGER}
+    and is_delete=0
+  </select>
+
+</mapper>

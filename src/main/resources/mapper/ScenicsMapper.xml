@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.ScenicsMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Scenics">
+    <id column="scenic_id" jdbcType="INTEGER" property="scenicId" />
+    <result column="scenic_name" jdbcType="VARCHAR" property="scenicName" />
+    <result column="scenic_open_time" jdbcType="VARCHAR" property="scenicOpenTime" />
+    <result column="scenic_description" jdbcType="VARCHAR" property="scenicDescription" />
+    <result column="scenic_cost_time" jdbcType="VARCHAR" property="scenicCostTime" />
+    <result column="scenic_tel" jdbcType="VARCHAR" property="scenicTel" />
+    <result column="scenic_addr" jdbcType="VARCHAR" property="scenicAddr" />
+    <result column="scenic_province" jdbcType="INTEGER" property="scenicProvince" />
+    <result column="scenic_city" jdbcType="INTEGER" property="scenicCity" />
+    <result column="scenic_img" jdbcType="VARCHAR" property="scenicImg" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="scenic_price" jdbcType="DOUBLE" property="scenicPrice" />
+    <result column="accept_people" jdbcType="VARCHAR" property="acceptPeople" />
+    <result column="accept_season" jdbcType="VARCHAR" property="acceptSeason" />
+    <result column="scenic_type" jdbcType="VARCHAR" property="scenicType" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    scenic_id, scenic_name, scenic_open_time, scenic_description, scenic_cost_time, scenic_tel, 
+    scenic_addr, scenic_province, scenic_city, scenic_img, is_delete,scenic_price,accept_people,accept_season,scenic_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select  s.scenic_id,
+    s.scenic_name,
+    s.scenic_open_time,
+    s.scenic_description,
+    s.scenic_cost_time,
+    s.scenic_tel,
+    s.scenic_addr,
+    s.scenic_province,
+    s.scenic_city,
+    s.scenic_img,
+    s.is_delete,
+    s.scenic_price,
+    s.accept_people,
+    s.accept_season,
+    s.scenic_type,
+     ci.city_name,
+     p.province_name
+    from scenics s,city ci,province p
+    where s.scenic_id = #{scenicId,jdbcType=INTEGER}
+    and s.scenic_city=ci.city_id
+    and s.scenic_province=p.province_id
+
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  scenics set is_delete=1
+    where scenic_id = #{scenicId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Scenics">
+    insert into scenics ( scenic_name, scenic_open_time,
+      scenic_description, scenic_cost_time, scenic_tel, 
+      scenic_addr, scenic_province, scenic_city, 
+      scenic_img, is_delete,scenic_price,accept_people,accept_season,scenic_type)
+    values ( #{scenicName,jdbcType=VARCHAR}, #{scenicOpenTime,jdbcType=VARCHAR},
+      #{scenicDescription,jdbcType=VARCHAR}, #{scenicCostTime,jdbcType=VARCHAR}, #{scenicTel,jdbcType=VARCHAR}, 
+      #{scenicAddr,jdbcType=VARCHAR}, #{scenicProvince,jdbcType=INTEGER}, #{scenicCity,jdbcType=INTEGER}, 
+      #{scenicImg,jdbcType=VARCHAR}, 0,#{scenicPrice,jdbcType=DOUBLE}, #{acceptPeople,jdbcType=VARCHAR},
+      #{acceptSeason,jdbcType=VARCHAR},
+      #{scenicType,jdbcType=VARCHAR})
+    <selectKey keyProperty="scenicId" resultType="Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() as scenicId
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Scenics">
+    insert into scenics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="scenicId != null">
+        scenic_id,
+      </if>
+      <if test="scenicName != null">
+        scenic_name,
+      </if>
+      <if test="scenicOpenTime != null">
+        scenic_open_time,
+      </if>
+      <if test="scenicDescription != null">
+        scenic_description,
+      </if>
+      <if test="scenicCostTime != null">
+        scenic_cost_time,
+      </if>
+      <if test="scenicTel != null">
+        scenic_tel,
+      </if>
+      <if test="scenicAddr != null">
+        scenic_addr,
+      </if>
+      <if test="scenicProvince != null">
+        scenic_province,
+      </if>
+      <if test="scenicCity != null">
+        scenic_city,
+      </if>
+      <if test="scenicImg != null">
+        scenic_img,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="scenicId != null">
+        #{scenicId,jdbcType=INTEGER},
+      </if>
+      <if test="scenicName != null">
+        #{scenicName,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicOpenTime != null">
+        #{scenicOpenTime,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicDescription != null">
+        #{scenicDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicCostTime != null">
+        #{scenicCostTime,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicTel != null">
+        #{scenicTel,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicAddr != null">
+        #{scenicAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicProvince != null">
+        #{scenicProvince,jdbcType=INTEGER},
+      </if>
+      <if test="scenicCity != null">
+        #{scenicCity,jdbcType=INTEGER},
+      </if>
+      <if test="scenicImg != null">
+        #{scenicImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Scenics">
+    update scenics
+    <set>
+      <if test="scenicName != null">
+        scenic_name = #{scenicName,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicOpenTime != null">
+        scenic_open_time = #{scenicOpenTime,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicDescription != null">
+        scenic_description = #{scenicDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicCostTime != null">
+        scenic_cost_time = #{scenicCostTime,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicTel != null">
+        scenic_tel = #{scenicTel,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicAddr != null">
+        scenic_addr = #{scenicAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicProvince != null">
+        scenic_province = #{scenicProvince,jdbcType=INTEGER},
+      </if>
+      <if test="scenicCity != null">
+        scenic_city = #{scenicCity,jdbcType=INTEGER},
+      </if>
+      <if test="scenicImg != null">
+        scenic_img = #{scenicImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where scenic_id = #{scenicId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Scenics">
+    update scenics
+    set scenic_name = #{scenicName,jdbcType=VARCHAR},
+      scenic_open_time = #{scenicOpenTime,jdbcType=VARCHAR},
+      scenic_description = #{scenicDescription,jdbcType=VARCHAR},
+      scenic_cost_time = #{scenicCostTime,jdbcType=VARCHAR},
+      scenic_tel = #{scenicTel,jdbcType=VARCHAR},
+      scenic_addr = #{scenicAddr,jdbcType=VARCHAR},
+      scenic_province = #{scenicProvince,jdbcType=INTEGER},
+      scenic_city = #{scenicCity,jdbcType=INTEGER},
+      scenic_img = #{scenicImg,jdbcType=VARCHAR},
+      scenic_price=#{scenicPrice,jdbcType=DOUBLE},
+      accept_people=#{acceptPeople,jdbcType=VARCHAR},
+      accept_season=#{acceptSeason,jdbcType=VARCHAR},
+      scenic_type=#{scenicType,jdbcType=VARCHAR},
+      is_delete = 0
+    where scenic_id = #{scenicId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getTurn_scenic" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from scenics
+    ORDER BY RAND() LIMIT 3
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from scenics
+  </select>
+  <select id="getAllScenic" resultMap="BaseResultMap">
+    select  s.scenic_id,
+    s.scenic_name,
+    s.scenic_open_time,
+    s.scenic_description,
+    s.scenic_cost_time,
+    s.scenic_tel,
+    s.scenic_addr,
+    s.scenic_province,
+    s.scenic_city,
+    s.scenic_img,
+    s.is_delete,
+    s.scenic_price,
+    s.accept_people,
+    s.accept_season,
+    s.scenic_type,
+    ci.city_name,
+    p.province_name
+    from scenics s,city ci,province p
+    where s.is_delete=0
+    and s.scenic_city=ci.city_id
+    and s.scenic_province=p.province_id
+    <if test="scenicName != null and scenicName != ''">
+      and s.scenic_name like CONCAT ('%',#{scenicName,jdbcType=VARCHAR},'%')
+    </if>
+    order by s.scenic_city limit #{current} ,#{size}
+  </select>
+
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from scenics
+    where is_delete=0
+    <if test="scenicName != null and scenicName != ''">
+      and scenic_name like CONCAT ('%',#{scenicName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <select id="getScenicInit" resultMap="BaseResultMap">
+    select  s.scenic_id,
+    s.scenic_name,
+    s.scenic_open_time,
+    s.scenic_description,
+    s.scenic_cost_time,
+    s.scenic_tel,
+    s.scenic_addr,
+    s.scenic_province,
+    s.scenic_city,
+    s.scenic_img,
+    s.is_delete,
+    s.scenic_price,
+    s.accept_people,
+    s.accept_season,
+    s.scenic_type,
+    ci.city_name,
+    p.province_name
+    from scenics s left join city ci
+    on s.scenic_city=ci.city_id
+    left join province p
+    on s.scenic_province=p.province_id
+    where s.is_delete=0
+    <if test="priceUp!=null and priceUp!='' and priceDown!=null and priceDown!=''">
+      and s.scenic_price between #{priceDown} and #{priceUp}
+    </if>
+    <if test="season != null and season!=''">
+      and s.accept_season like CONCAT ('%',#{season,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="people != null and people!=''">
+      and s.accept_people like CONCAT ('%',#{people,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="typeId != null and typeId!='' and (typeId!='0'.toString())">
+      and s.scenic_type like CONCAT ('%',#{typeId,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="areaId != 0">
+      and p.type_id =#{areaId,jdbcType=INTEGER}
+    </if>
+    <if test="scenicName != null and scenicName!=''">
+      and s.scenic_name like CONCAT ('%',#{scenicName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="cityId!=null and cityId!=0">
+      and p.province_id=#{cityId,jdbcType=INTEGER}
+    </if>
+    <if test="sortType==2">
+      and c.collect_type=1
+      GROUP BY s.scenic_id
+      ORDER BY count(c.scenic_strategy) DESC limit #{current}, #{size}
+    </if>
+    <if test="sortType==1">
+      order by RAND() limit 16
+    </if>
+    <if test="sortType==0">
+      order by CONVERT(s.scenic_name USING gbk) limit #{current}, #{size}
+    </if>
+
+  </select>
+  <select id="getScenicInitCount" resultType="java.lang.Integer">
+    select count(1)
+    from scenics s left join city ci
+    on s.scenic_city=ci.city_id
+    left join province p
+    on s.scenic_province=p.province_id
+    where s.is_delete=0
+    <if test="priceUp!=null and priceUp!='' and priceDown!=null and priceDown!=''">
+      and s.scenic_price between #{priceDown} and #{priceUp}
+    </if>
+    <if test="season != null and season!=''">
+      and s.accept_season like CONCAT ('%',#{season,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="people != null and people!=''">
+      and s.accept_people like CONCAT ('%',#{people,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="typeId != null and typeId!=''">
+      and s.scenic_type like CONCAT ('%',#{typeId,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="areaId != 0">
+      and p.type_id =#{areaId,jdbcType=INTEGER}
+    </if>
+    <if test="scenicName != null and scenicName!=''">
+      and s.scenic_name like CONCAT ('%',#{scenicName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="cityId!=null and cityId!=0">
+      and s.scenic_city=#{cityId,jdbcType=INTEGER}
+    </if>
+    <if test="sortType==2">
+      and c.collect_type=1
+    </if>
+  </select>
+  <select id="getScenicLimitSix" resultMap="BaseResultMap">
+    select  s.scenic_id,
+    s.scenic_name,
+    s.scenic_open_time,
+    s.scenic_description,
+    s.scenic_cost_time,
+    s.scenic_tel,
+    s.scenic_addr,
+    s.scenic_province,
+    s.scenic_city,
+    s.scenic_img,
+    s.is_delete,
+     s.scenic_price,
+    s.accept_people,
+    s.accept_season,
+    ci.city_name,
+     s.scenic_type,
+    p.province_name
+    from scenics s left join city ci
+    on s.scenic_city=ci.city_id
+    left join province p
+    on s.scenic_province=p.province_id
+    left join collect c
+    on s.scenic_id=c.scenic_strategy
+    left join `lines` l
+    on s.scenic_id=l.line_scenic
+    left join line_group lg
+    on l.line_id=lg.line_id
+    left join orders o
+    on o.line_or_hotel_id=lg.id
+     where (o.order_status=1 or o.order_status=2 or o.order_status=4 or o.order_status IS NULL)
+    and (o.order_type=1 or o.order_type IS NULL)
+    GROUP BY s.scenic_id
+    order by count(s.scenic_id) DESC LIMIT #{num}
+  </select>
+  <select id="getScenicCityLimitFive" resultMap="BaseResultMap">
+    select  s.scenic_id,
+    s.scenic_name,
+    s.scenic_open_time,
+    s.scenic_description,
+    s.scenic_cost_time,
+    s.scenic_tel,
+    s.scenic_addr,
+    s.scenic_province,
+    s.scenic_city,
+    s.scenic_img,
+    s.scenic_price,
+    s.accept_people,
+    s.accept_season,
+    s.is_delete,
+    ci.city_name,
+    p.province_name
+    from scenics s left join city ci
+    on s.scenic_city=ci.city_id
+    left join province p
+    on s.scenic_province=p.province_id
+    left join collect c
+    on s.scenic_id=c.scenic_strategy
+    left join `lines` l
+    on s.scenic_id=l.line_scenic
+    left join line_group lg
+    on l.line_id=lg.line_id
+    left join orders o
+    on o.line_or_hotel_id=lg.id
+    where (o.order_status=1 or o.order_status=2 or o.order_status=4 or o.order_status IS NULL)
+    and (o.order_type=1 or o.order_type IS NULL)
+    and s.is_delete=0
+    <if test="scenicId!=0">
+      and s.scenic_id !=#{scenicId,jdbcType=INTEGER}
+    </if>
+
+    and  s.scenic_city=#{cityId,jdbcType=INTEGER}
+    GROUP BY s.scenic_id
+    order by count(s.scenic_id) DESC LIMIT 4
+  </select>
+  <select id="getScenicNotScenicId"  resultMap="BaseResultMap">
+    select  s.scenic_id,
+    s.scenic_name,
+    s.scenic_open_time,
+    s.scenic_description,
+    s.scenic_cost_time,
+    s.scenic_tel,
+    s.scenic_addr,
+    s.scenic_province,
+    s.scenic_city,
+    s.scenic_img,
+    s.scenic_price,
+    s.accept_people,
+    s.accept_season,
+    s.is_delete,
+    ci.city_name,
+    s.scenic_type,
+    p.province_name
+    from scenics s left join city ci
+    on s.scenic_city=ci.city_id
+    left join province p
+    on s.scenic_province=p.province_id
+    left join collect c
+    on s.scenic_id=c.scenic_strategy
+    left join `lines` l
+    on s.scenic_id=l.line_scenic
+    left join line_group lg
+    on l.line_id=lg.line_id
+    where s.is_delete=0
+    <if test="scenicId!=0">
+      and s.scenic_id !=#{scenicId,jdbcType=INTEGER}
+    </if>
+    and s.scenic_city=#{cityId,jdbcType=INTEGER}
+    GROUP BY s.scenic_id
+    order by count(s.scenic_id) DESC
+  </select>
+
+
+  <select id="getAllUsersLineId"  resultMap="BaseResultMap">
+    select u.*
+    from user_action ua,users u,scenics s
+    where u.user_id=ua.user_id
+    and ua.scenic_id=s.scecnic_id
+    and ua.scecnic_id = #{scenicId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getAllUsersO"  resultType="java.lang.Long">
+    select scenic_id from scenics
+  </select>
+
+  <select id="getAllUsersType"  resultMap="BaseResultMap">
+    select  s.scenic_id,
+    s.scenic_name,
+    s.scenic_open_time,
+    s.scenic_description,
+    s.scenic_cost_time,
+    s.scenic_tel,
+    s.scenic_addr,
+    s.scenic_province,
+    s.scenic_city,
+    s.scenic_img,
+    s.scenic_price,
+    s.accept_people,
+    s.accept_season,
+    s.is_delete,
+    ci.city_name,
+    s.scenic_type,
+    p.province_name
+    from scenics s left join city ci
+    on s.scenic_city=ci.city_id
+    left join province p
+    on s.scenic_province=p.province_id
+    left join collect c
+    on s.scenic_id=c.scenic_strategy
+    left join `lines` l
+    on s.scenic_id=l.line_scenic
+    left join line_group lg
+    on l.line_id=lg.line_id
+    where s.is_delete=0
+    <if test="scenicId!=0">
+      and s.scenic_id !=#{scenicId,jdbcType=INTEGER}
+    </if>
+    <if test="typeId!=null and typeId!=''">
+      and s.scenic_type like CONCAT ('%',#{typeId,jdbcType=VARCHAR},'%')
+    </if>
+    GROUP BY s.scenic_id
+
+    <if test="num!=0">
+      order by count(s.scenic_id) DESC LIMIT #{num}
+    </if>
+  </select>
+</mapper>

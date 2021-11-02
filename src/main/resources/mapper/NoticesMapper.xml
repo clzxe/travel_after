@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.NoticesMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Notices">
+    <id column="notice_id" jdbcType="INTEGER" property="noticeId" />
+    <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
+    <result column="notice_content" jdbcType="VARCHAR" property="noticeContent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="notice_img" jdbcType="VARCHAR" property="noticeImg" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    notice_id, notice_title, notice_content, create_time, notice_img, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from notices
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update notices
+    set is_delete=1
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Notices">
+    insert into notices ( notice_title, notice_content,
+      create_time, notice_img, is_delete
+      )
+    values ( #{noticeTitle,jdbcType=VARCHAR}, #{noticeContent,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{noticeImg,jdbcType=VARCHAR}, 0
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Notices">
+    insert into notices
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="noticeId != null">
+        notice_id,
+      </if>
+      <if test="noticeTitle != null">
+        notice_title,
+      </if>
+      <if test="noticeContent != null">
+        notice_content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="noticeImg != null">
+        notice_img,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="noticeId != null">
+        #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeTitle != null">
+        #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null">
+        #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeImg != null">
+        #{noticeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Notices">
+    update notices
+    <set>
+      <if test="noticeTitle != null">
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null">
+        notice_content = #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeImg != null">
+        notice_img = #{noticeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Notices">
+    update notices
+    set notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      notice_content = #{noticeContent,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      notice_img = #{noticeImg,jdbcType=VARCHAR},
+      is_delete = 0
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getNotices"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from notices
+    ORDER BY create_time DESC LIMIT 7
+  </select>
+
+  <select id="getAllNotices" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from notices
+    where is_delete=0
+    <if test="noticeTitle != null and noticeTitle!=''">
+      and notice_title like CONCAT ('%',#{noticeTitle,jdbcType=VARCHAR},'%')
+    </if>
+    order by create_time limit #{current},#{size}
+  </select>
+
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from notices
+    where is_delete=0
+    <if test="noticeTitle != null and noticeTitle!=''">
+      and notice_title like CONCAT ('%',#{noticeTitle,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+</mapper>

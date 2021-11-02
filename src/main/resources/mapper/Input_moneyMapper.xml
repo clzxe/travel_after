@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.Input_moneyMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Input_money">
+    <id column="in_id" jdbcType="INTEGER" property="inId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_account" jdbcType="INTEGER" property="userAccount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    in_id, order_id, amount, user_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from input_money
+    where in_id = #{inId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from input_money
+    where in_id = #{inId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.travel.travel.entity.Input_money">
+    insert into input_money (order_id, amount,
+      user_id, create_time)
+    values (#{orderId,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE},
+      #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Input_money">
+    insert into input_money
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="inId != null">
+        in_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="inId != null">
+        #{inId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Input_money">
+    update input_money
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where in_id = #{inId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Input_money">
+    update input_money
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DOUBLE},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where in_id = #{inId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+     im.in_id,
+     im.order_id,
+     im.amount,
+     im.user_id,
+     im.create_time,
+     u.user_account
+    from input_money im
+    left join users u
+    on im.user_id=u.user_id
+    where im.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+</mapper>

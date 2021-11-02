@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.ProvinceMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Province">
+    <id column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    province_id, province_name, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from province
+    where province_id = #{provinceId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  province set is_delete=0
+    where province_id = #{provinceId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Province">
+    insert into province (province_id, province_name, is_delete
+      )
+    values (#{provinceId,jdbcType=INTEGER}, #{provinceName,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Province">
+    insert into province
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="provinceName != null">
+        province_name,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null">
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Province">
+    update province
+    <set>
+      <if test="provinceName != null">
+        province_name = #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where province_id = #{provinceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Province">
+    update province
+    set province_name = #{provinceName,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where province_id = #{provinceId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAllProvince"  resultMap="BaseResultMap">
+    select
+    province_id, province_name, is_delete
+    from province
+  </select>
+
+  <select id="getAllProvinceByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from province
+    where is_delete=0
+    <if test="provinceName != null and provinceName !='' ">
+      and province_name like CONCAT ('%',#{provinceName,jdbcType=VARCHAR},'%')
+    </if>
+    order by province_id limit #{current},#{size}
+  </select>
+
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from province
+    where is_delete=0
+    <if test="provinceName != null and provinceName !='' ">
+      and province_name like  CONCAT ('%',#{provinceName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <select id="getAllProvinceByType"  resultMap="BaseResultMap">
+    select
+    province_id, province_name, is_delete
+    from province
+    <if test="typeId!=0">
+      where type_id=#{typeId,jdbcType=INTEGER}
+    </if>
+  </select>
+
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.ThemesMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Themes">
+    <id column="theme_id" jdbcType="INTEGER" property="themeId" />
+    <result column="theme_name" jdbcType="VARCHAR" property="themeName" />
+    <result column="class_id" jdbcType="INTEGER" property="classId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    theme_id, theme_name, class_id, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from themes
+    where theme_id = #{themeId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update themes
+    set is_delete=1
+    where theme_id = #{themeId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Themes">
+    insert into themes (theme_id, theme_name, class_id, 
+      is_delete)
+    values (#{themeId,jdbcType=INTEGER}, #{themeName,jdbcType=VARCHAR}, #{classId,jdbcType=INTEGER}, 
+     0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Themes">
+    insert into themes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="themeId != null">
+        theme_id,
+      </if>
+      <if test="themeName != null">
+        theme_name,
+      </if>
+      <if test="classId != null">
+        class_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="themeId != null">
+        #{themeId,jdbcType=INTEGER},
+      </if>
+      <if test="themeName != null">
+        #{themeName,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null">
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Themes">
+    update themes
+    <set>
+      <if test="themeName != null">
+        theme_name = #{themeName,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null">
+        class_id = #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where theme_id = #{themeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Themes">
+    update themes
+    set theme_name = #{themeName,jdbcType=VARCHAR},
+      class_id = #{classId,jdbcType=INTEGER},
+      is_delete = 0
+    where theme_id = #{themeId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getThemes" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from themes
+    ORDER BY RAND() LIMIT 4
+  </select>
+
+  <select id="getAllThemes" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from themes
+    where is_delete=0
+    <if test="themeName != null">
+      and theme_name like CONCAT ('%',#{themeName,jdbcType=VARCHAR},'%')
+    </if>
+    order by theme_id DESC  limit #{size},#{current}
+  </select>
+
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from themes
+    where is_delete=0
+    <if test="themeName != null">
+      and theme_name like CONCAT ('%',#{themeName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <select id="getThemesByCassId" resultMap="BaseResultMap">
+    select
+   t.theme_id,
+   t.theme_name,
+   t.class_id,
+   t.is_delete,
+   cl.class_name
+    from themes t,classes cl
+    where t.is_delete=0
+      and t.class_id =#{classId,jdbcType=INTEGER}
+      and t.class_id=cl.class_id
+    order by theme_id DESC
+  </select>
+
+  <update id="deleteByCassId" parameterType="java.lang.Integer">
+    update themes
+    set is_delete=1
+    where classId =#{classId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getThemesAllNav" resultMap="BaseResultMap">
+    select t.theme_id,
+    t.theme_name,
+    t.class_id,
+    t.is_delete from themes t where t.is_delete=0 order by theme_id DESC
+  </select>
+
+</mapper>

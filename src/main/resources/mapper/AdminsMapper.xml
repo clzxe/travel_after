@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.AdminsMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Admins">
+    <id column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="admin_account" jdbcType="VARCHAR" property="adminAccount" />
+    <result column="admin_password" jdbcType="VARCHAR" property="adminPassword" />
+    <result column="admin_identity" jdbcType="VARCHAR" property="adminIdentity" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    admin_id, admin_account, admin_password, admin_identity
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from admins
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admins
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.travel.travel.entity.Admins">
+    insert into admins (admin_id, admin_account, admin_password, 
+      admin_identity)
+    values (#{adminId,jdbcType=INTEGER}, #{adminAccount,jdbcType=VARCHAR}, #{adminPassword,jdbcType=VARCHAR}, 
+      #{adminIdentity,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Admins">
+    insert into admins
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="adminAccount != null">
+        admin_account,
+      </if>
+      <if test="adminPassword != null">
+        admin_password,
+      </if>
+      <if test="adminIdentity != null">
+        admin_identity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="adminId != null">
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="adminAccount != null">
+        #{adminAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPassword != null">
+        #{adminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="adminIdentity != null">
+        #{adminIdentity,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Admins">
+    update admins
+    <set>
+      <if test="adminAccount != null">
+        admin_account = #{adminAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPassword != null">
+        admin_password = #{adminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="adminIdentity != null">
+        admin_identity = #{adminIdentity,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Admins">
+    update admins
+    set admin_account = #{adminAccount,jdbcType=VARCHAR},
+      admin_password = #{adminPassword,jdbcType=VARCHAR},
+      admin_identity = #{adminIdentity,jdbcType=VARCHAR}
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByAdminAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select admin_id, admin_account, admin_password, admin_identity
+    from admins
+    where admin_account = #{adminAccount,jdbcType=VARCHAR}
+  </select>
+</mapper>

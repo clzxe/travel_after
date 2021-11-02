@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.GroupsMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.Groups">
+    <id column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_des" jdbcType="VARCHAR" property="groupDes" />
+    <result column="group_ceatetime" jdbcType="TIMESTAMP" property="groupCeatetime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    group_id, group_name, group_des, group_ceatetime, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from groups
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update groups
+    set is_delete=1
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.Groups">
+    insert into groups ( group_name, group_des,
+      group_ceatetime, is_delete)
+    values ( #{groupName,jdbcType=VARCHAR}, #{groupDes,jdbcType=VARCHAR},
+      #{groupCeatetime,jdbcType=TIMESTAMP}, 0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.Groups">
+    insert into groups
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="groupDes != null">
+        group_des,
+      </if>
+      <if test="groupCeatetime != null">
+        group_ceatetime,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupDes != null">
+        #{groupDes,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCeatetime != null">
+        #{groupCeatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.Groups">
+    update groups
+    <set>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupDes != null">
+        group_des = #{groupDes,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCeatetime != null">
+        group_ceatetime = #{groupCeatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.Groups">
+    update groups
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      group_des = #{groupDes,jdbcType=VARCHAR},
+      group_ceatetime = #{groupCeatetime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from groups
+  </select>
+
+  <select id="getAllGroups" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from groups
+    where is_delete=0
+    <if test="groupName != null and groupName!=''">
+      and group_name like CONCAT ('%',#{groupName,jdbcType=VARCHAR},'%')
+    </if>
+    order by group_id limit #{current},#{size}
+  </select>
+
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from groups
+    where is_delete=0
+    <if test="groupName != null and groupName!=''">
+      and group_name like CONCAT ('%',#{groupName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+</mapper>

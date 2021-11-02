@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.CityMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.City">
+    <id column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="city_photo" jdbcType="VARCHAR" property="cityPhoto" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    city_id, city_name, city_photo, province_id, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    ci.city_id,
+    ci.city_name,
+    ci.city_photo,
+    ci.province_id,
+    ci.is_delete,
+    p.province_name
+    from city ci,province p
+    where ci.is_delete=0
+    and ci.province_id=p.province_id
+    and ci.city_id = #{cityId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update city
+    set is_delete=1
+    where city_id = #{cityId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.City">
+    insert into city (city_name, city_photo,
+      province_id, is_delete)
+    values (#{cityName,jdbcType=VARCHAR}, #{cityPhoto,jdbcType=VARCHAR},
+      #{provinceId,jdbcType=INTEGER}, 0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.City">
+    insert into city
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="cityName != null">
+        city_name,
+      </if>
+      <if test="cityPhoto != null">
+        city_photo,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null">
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityPhoto != null">
+        #{cityPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.City">
+    update city
+    <set>
+      <if test="cityName != null">
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityPhoto != null">
+        city_photo = #{cityPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where city_id = #{cityId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.City">
+    update city
+    set city_name = #{cityName,jdbcType=VARCHAR},
+      city_photo = #{cityPhoto,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where city_id = #{cityId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getCities" resultMap="BaseResultMap">
+    select
+    ci.city_id,
+    ci.city_name,
+    ci.city_photo,
+    ci.province_id,
+    ci.is_delete,
+    p.province_name
+    from city ci,province p
+    where ci.is_delete=0
+    and ci.province_id=p.province_id
+    order by CONVERT(ci.city_name USING gbk)
+  </select>
+
+  <select id="getCitieByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from city
+    where city_name = #{cityName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getCitiesByProvinceId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    ci.city_id,
+    ci.city_name,
+    ci.city_photo,
+    ci.province_id,
+    ci.is_delete,
+    p.province_name
+    from city ci,province p
+    where ci.is_delete=0
+    and ci.province_id=p.province_id
+    and ci.province_id = #{provinceId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getAllCity" resultMap="BaseResultMap">
+    select
+    ci.city_id,
+    ci.city_name,
+    ci.city_photo,
+    ci.province_id,
+    ci.is_delete,
+    p.province_name
+    from city ci,province p
+    where ci.is_delete=0
+    and ci.province_id=p.province_id
+    <if test="cityName != null and cityName !='' ">
+      and ci.city_name like CONCAT ('%',#{cityName,jdbcType=VARCHAR},'%')
+    </if>
+    order by ci.city_id limit #{current},#{size}
+  </select>
+
+  <select id="getAllCount" resultType="java.lang.Integer">
+    select count(1)
+    from city
+    where is_delete=0
+    <if test="cityName != null">
+      and city_name like  CONCAT ('%',#{cityName,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+</mapper>

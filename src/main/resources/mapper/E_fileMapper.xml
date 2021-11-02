@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.travel.repository.E_fileMapper">
+  <resultMap id="BaseResultMap" type="com.travel.travel.entity.E_file">
+    <id column="file_id" jdbcType="INTEGER" property="fileId" />
+    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    file_id, file_path, evaluate_id, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from e_file
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  e_file
+    set is_delete=1
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.travel.travel.entity.E_file">
+    insert into e_file ( file_path, evaluate_id,
+      is_delete)
+    values (#{fileId,jdbcType=INTEGER}, #{filePath,jdbcType=VARCHAR}, #{evaluateId,jdbcType=INTEGER}, 
+      0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.travel.travel.entity.E_file">
+    insert into e_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="filePath != null">
+        file_path,
+      </if>
+      <if test="evaluateId != null">
+        evaluate_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        #{fileId,jdbcType=INTEGER},
+      </if>
+      <if test="filePath != null">
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateId != null">
+        #{evaluateId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.travel.travel.entity.E_file">
+    update e_file
+    <set>
+      <if test="filePath != null">
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluateId != null">
+        evaluate_id = #{evaluateId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.travel.travel.entity.E_file">
+    update e_file
+    set file_path = #{filePath,jdbcType=VARCHAR},
+      evaluate_id = #{evaluateId,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+</mapper>

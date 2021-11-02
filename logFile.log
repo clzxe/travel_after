@@ -1,0 +1,11 @@
+03:21:00 [scheduling-1] DEBUG o.mybatis.spring.SqlSessionUtils - Creating a new SqlSession
+03:21:00 [scheduling-1] DEBUG o.mybatis.spring.SqlSessionUtils - SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@397bcc80] was not registered for synchronization because synchronization is not active
+03:21:00 [scheduling-1] DEBUG o.s.j.datasource.DataSourceUtils - Fetching JDBC Connection from DataSource
+03:21:00 [scheduling-1] DEBUG o.m.s.t.SpringManagedTransaction - JDBC Connection [HikariProxyConnection@1472761732 wrapping com.mysql.cj.jdbc.ConnectionImpl@3c05c22] will not be managed by Spring
+03:21:00 [scheduling-1] DEBUG c.t.t.r.O.autoOrderDelete - ==>  Preparing: update orders set order_status=5 where creat_time <= SUBDATE(now(),interval -15 minute) and order_status=0
+03:21:00 [scheduling-1] DEBUG c.t.t.r.O.autoOrderDelete - ==> Parameters: 
+03:21:00 [scheduling-1] DEBUG c.t.t.r.O.autoOrderDelete - <==    Updates: 0
+03:21:00 [scheduling-1] DEBUG o.mybatis.spring.SqlSessionUtils - Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@397bcc80]
+03:21:25 [defaultDataSource housekeeper] DEBUG c.zaxxer.hikari.pool.HikariPool - defaultDataSource - Pool stats (total=10, active=0, idle=10, waiting=0)
+03:21:25 [defaultDataSource housekeeper] DEBUG c.zaxxer.hikari.pool.HikariPool - defaultDataSource - Fill pool skipped, pool is at sufficient level.
+03:21:35 [http-nio-8080-exec-10] INFO  c.travel.travel.config.WebSocket - 【断开连接】，连接总数:0

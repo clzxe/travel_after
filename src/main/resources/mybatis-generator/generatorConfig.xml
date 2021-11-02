@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--mybatis的代码生成器相关配置-->
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 引入配置文件 -->
+    <!--执行generator插件生成文件的命令： call mvn mybatis-generator:generate -e -->
+    <!-- 引入配置文件 -->
+    <properties resource="mybatis-generator/jdbc.properties"/>
+    <!--classPathEntry:数据库的JDBC驱动,换成你自己的驱动位置 可选 -->
+    <!--<classPathEntry location="E:\mybatis\mysql-connector-java-5.1.24-bin.jar" /> -->
+
+    <!-- 一个数据库一个context -->
+    <!--defaultModelType="flat" 大数据字段，不分表 -->
+
+
+    <!-- 一个数据库一个context,context的子元素必须按照它给出的顺序
+        property*,plugin*,commentGenerator?,jdbcConnection,javaTypeResolver?,
+        javaModelGenerator,sqlMapGenerator?,javaClientGenerator?,table+
+    -->
+    <context id="myContext" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <!-- 这个插件给生成的Java模型对象增加了equals和hashCode方法 -->
+        <!--<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>-->
+
+        <!-- 注释 -->
+        <commentGenerator>
+            <!-- 是否不生成注释 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 不希望生成的注释中包含时间戳 -->
+            <!--<property name="suppressDate" value="true"/>-->
+            <!-- 添加 db 表中字段的注释，只有suppressAllComments为false时才生效-->
+            <!--<property name="addRemarkComments" value="true"/>-->
+        </commentGenerator>
+
+
+        <!-- jdbc连接 -->
+        <jdbcConnection driverClass="${jdbc.driver}"
+                        connectionURL="${jdbc.url}"
+                        userId="${jdbc.user}"
+                        password="${jdbc.password}">
+            <!--高版本的 mysql-connector-java 需要设置 nullCatalogMeansCurrent=true-->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <!-- 类型转换 -->
+        <javaTypeResolver>
+            <!--是否使用bigDecimal，默认false。
+                false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer
+                true，把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal-->
+            <property name="forceBigDecimals" value="true"/>
+            <!--默认false
+                false，将所有 JDBC 的时间类型解析为 java.util.Date
+                true，将 JDBC 的时间类型按如下规则解析
+                    DATE	                -> java.time.LocalDate
+                    TIME	                -> java.time.LocalTime
+                    TIMESTAMP               -> java.time.LocalDateTime
+                    TIME_WITH_TIMEZONE  	-> java.time.OffsetTime
+                    TIMESTAMP_WITH_TIMEZONE	-> java.time.OffsetDateTime
+                -->
+            <!--<property name="useJSR310Types" value="false"/>-->
+        </javaTypeResolver>
+        <!-- 生成实体类地址 -->
+        <javaModelGenerator targetPackage="com.travel.travel.entity" targetProject="src/main/java" >
+
+        </javaModelGenerator>
+        <!-- 生成mapxml文件 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources" >
+
+        </sqlMapGenerator>
+        <!-- 生成mapxml对应client，也就是接口dao -->
+        <javaClientGenerator targetPackage="com.travel.travel.repository" targetProject="src/main/java" type="XMLMAPPER" >
+
+        </javaClientGenerator>
+        <!-- table可以有多个,每个数据库中的表都可以写一个table，tableName表示要匹配的数据库表,也可以在tableName属性中通过使用%通配符来匹配所有数据库表,只有匹配的表才会自动生成文件 -->
+        <!--如果想生成一个表则tableName="table_name"-->
+
+
+        <table tableName="scenic_type" domainObjectName="ScenicType"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
+
+    </context>
+</generatorConfiguration>
