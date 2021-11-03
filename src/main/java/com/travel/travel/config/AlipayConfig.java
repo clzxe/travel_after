@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AlipayConfig {
-    public static String app_id = "";
+    public static String app_id = "123";
     // [沙箱环境]商户私钥，你的PKCS8格式RSA2私钥
     public static String merchant_private_key ="";
     // [沙箱环境]支付宝公钥
